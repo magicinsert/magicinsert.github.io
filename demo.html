@@ -122,6 +122,7 @@
       cursor: move;
       transition: all 0.5s ease-in-out;
       background-color: transparent;
+      touch-action: none;
     }
     .instructions {
       text-align: center;
@@ -253,7 +254,7 @@
         <button id="resetButton">Reset Demo</button>
       </div>
     </div>
-</section>
+  </section>
 
   <script>
     const characters = ['alien', 'chest', 'clown', 'dog', 'gnome', 'goblin', 'griffon', 'unicorn'];
@@ -309,9 +310,18 @@
       staging.innerHTML = '';
       const char = document.createElement('div');
       char.className = 'draggable-character';
+      char.id = 'draggableChar';
       char.style.backgroundImage = `url('assets/characters/${selectedCharacter}.png')`;
       char.draggable = true;
+      
+      // Mouse events
       char.ondragstart = drag;
+      
+      // Touch events
+      char.ontouchstart = touchStart;
+      char.ontouchmove = touchMove;
+      char.ontouchend = touchEnd;
+      
       staging.appendChild(char);
     }
 
@@ -385,18 +395,62 @@
       if (dottedLine) dottedLine.style.opacity = '0';
     }
 
+    let touchStartX, touchStartY;
+
+    function touchStart(ev) {
+      const touch = ev.touches[0];
+      touchStartX = touch.clientX - ev.target.offsetLeft;
+      touchStartY = touch.clientY - ev.target.offsetTop;
+      const dottedLine = document.getElementById('dottedLine');
+      if (dottedLine) dottedLine.style.opacity = '0';
+    }
+
+    function touchMove(ev) {
+      ev.preventDefault();
+      const touch = ev.touches[0];
+      const newX = touch.clientX - touchStartX;
+      const newY = touch.clientY - touchStartY;
+      ev.target.style.left = `${newX}px`;
+      ev.target.style.top = `${newY}px`;
+    }
+
+    function touchEnd(ev) {
+      const char = ev.target;
+      const scene = document.getElementById('scene');
+      const sceneRect = scene.getBoundingClientRect();
+      const charRect = char.getBoundingClientRect();
+
+      if (charRect.left < sceneRect.right &&
+          charRect.right > sceneRect.left &&
+          charRect.top < sceneRect.bottom &&
+          charRect.bottom > sceneRect.top) {
+        
+        const side = (charRect.left + charRect.width / 2 <= sceneRect.left + sceneRect.width / 2) ? 'l' : 'r';
+        mergeCharacter(side);
+      } else {
+        // If not dropped in the scene, return to original position
+        char.style.left = '';
+        char.style.top = '';
+      }
+    }
+
     function allowDrop(ev) {
       ev.preventDefault();
     }
 
     function drop(ev) {
       ev.preventDefault();
-      const char = document.querySelector('.draggable-character');
       const scene = document.getElementById('scene');
       const rect = scene.getBoundingClientRect();
       const x = ev.clientX - rect.left;
       
       const side = x <= scene.offsetWidth / 2 ? 'l' : 'r';
+      mergeCharacter(side);
+    }
+
+    function mergeCharacter(side) {
+      const char = document.getElementById('draggableChar');
+      const scene = document.getElementById('scene');
       
       char.style.animation = 'dissolve 0.5s forwards';
       
