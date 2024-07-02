@@ -168,6 +168,40 @@
     #resetButton:hover {
       background-color: #45a049;
     }
+
+    /* Mobile-specific styles */
+    @media screen and (max-width: 768px) {
+      .selection-panels {
+        flex-direction: column;
+        gap: 30px;
+      }
+      .selection-panel {
+        width: 100%;
+      }
+      .selection-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .scene-container {
+        flex-direction: column;
+        gap: 20px;
+      }
+      .scene {
+        width: 100%;
+        max-width: 400px;
+        height: 300px;
+      }
+      #characterStaging {
+        width: 100%;
+        height: 200px;
+      }
+      .draggable-character {
+        width: 150px;
+        height: 150px;
+      }
+      .instructions {
+        font-size: 16px;
+      }
+    }
   </style>
 </head>
 
@@ -219,7 +253,7 @@
         <button id="resetButton">Reset Demo</button>
       </div>
     </div>
-  </section>
+</section>
 
   <script>
     const characters = ['alien', 'chest', 'clown', 'dog', 'gnome', 'goblin', 'griffon', 'unicorn'];
@@ -362,7 +396,7 @@
       const rect = scene.getBoundingClientRect();
       const x = ev.clientX - rect.left;
       
-      const side = x <= 200 ? 'l' : 'r';
+      const side = x <= scene.offsetWidth / 2 ? 'l' : 'r';
       
       char.style.animation = 'dissolve 0.5s forwards';
       
