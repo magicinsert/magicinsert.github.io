@@ -37,6 +37,11 @@
     .publication-links {
       margin-bottom: 0;
     }
+    @media only screen and (max-width: 768px) {
+    .hide-on-mobile {
+      display: none !important;
+    }
+    }
   </style>
 </head>
 
@@ -87,14 +92,22 @@
                   <span>Paper</span>
                 </a>
               </span>
-              <span class="link-block">
+              <!-- <span class="link-block">
                 <a href="demo.html" class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                     <i class="fas fa-play"></i>
                   </span>
                   <span>Demo</span>
                 </a>
-              </span>
+              </span> -->
+              <span class="link-block hide-on-mobile">
+                <a href="demo.html" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="fas fa-play"></i>
+                  </span>
+                  <span>Demo</span>
+                </a>
+              </span>              
               <span class="link-block">
                 <a href="./subjectplop.zip" download="subjectplop.zip" class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
