@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Magic Insert: Style-Aware Drag-and-Drop">
+  <meta name="keywords" content="Style-aware drag-and-drop for intuitive image editing">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Magic Insert: Style-Aware Drag-and-Drop</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+
+  <style>
+    .hero-body {
+      padding-bottom: 1.5rem;
+    }
+    .section.reduced-top-margin {
+      margin-top: -3.2rem;
+    }
+    .publication-links {
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container">
+        <div class="container has-text-centered">
+          <h1 class="title is-1 publication-title">
+            Magic Insert: Style-Aware Drag-and-Drop
+          </h1>
+          <div class="is-size-5 publication-authors">
+            <div class="author-block">
+              <a href="https://scholar.google.fr/citations?user=CiOmcSIAAAAJ&hl=en">Nataniel Ruiz</a>,
+            </div>
+            <div class="author-block">
+              <a href="https://scholar.google.com/citations?user=k1eaag4AAAAJ&hl=en">Yuanzhen Li</a>,
+            </div>
+            <div class="author-block">
+              <a href="https://nealwadhwa.com">Neal Wadhwa</a>,
+            </div>
+            <div class="author-block">
+              <a href="https://scholar.google.co.il/citations?user=Zi5KiDsAAAAJ&hl=en">Yael Pritch</a>,
+            </div>
+            <div class="author-block">
+              <a href="https://scholar.google.com/citations?user=ttBdcmsAAAAJ&hl=en">Michael Rubinstein</a>,
+            </div>
+            <div class="author-block">
+              <a href="https://scholar.google.com/citations?user=0VQ1sjcAAAAJ&hl=en">David E. Jacobs</a>,
+            </div>
+            <div class="author-block">
+              <a href="https://x.com/shlomifruchter?lang=en">Shlomi Fruchter</a>
+            </div>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block" style="font-size: 1.7em;">Google</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="#" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="demo.html" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="fas fa-play"></i>
+                  </span>
+                  <span>Demo</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="./subjectplop.zip" download="subjectplop.zip" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="fas fa-download"></i>
+                  </span>
+                  <span>Dataset</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reduced-top-margin">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+            <img src="figure/teaser.png" alt="Teaser Image" width="100%" height="100%">
+          </div>
+          <p class="is-size-5">
+            Using <i>Magic Insert</i> we are able to, for the first time, drag-and-drop a subject from an image with an arbitrary style onto another target image with a vastly different style and achieve a style-aware and realistic insertion of the subject into the target image.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              We present <strong>Magic Insert</strong>, a method for dragging-and-dropping subjects from a user-provided image into a target image of a different style in a physically plausible manner while matching the style of the target image. This work formalizes the problem of style-aware drag-and-drop and presents a method for tackling it by addressing two sub-problems: <i>style-aware personalization</i> and <i>realistic object insertion in stylized images</i>. For style-aware personalization, our method first fine-tunes a pretrained text-to-image diffusion model using LoRA and learned text tokens on the subject image, and then infuses it with a CLIP representation of the target style. For object insertion, we use <i>Bootstrapped Domain Adaption</i> to adapt a domain-specific photorealistic object insertion model to the domain of diverse artistic styles. Overall, the method significantly outperforms traditional approaches such as inpainting. Finally, we present a dataset, SubjectPlop, to facilitate evaluation and future progress in this area.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Method</h2>
+          <h3 class="title is-4">Style-Aware Personalization</h3>
+          <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+            <img src="figure/style_aware_personalization.png" alt="Style-Aware Personalization" width="100%" height="100%">
+          </div>
+          <div class="content has-text-justified">
+            <p>
+              To generate a subject that fully respects the style of the target image while also conserving the subject's essence and identity, we (1) personalize a diffusion model in both weight and embedding space, by training LoRA deltas on top of the pre-trained diffusion model and simultaneously training the embedding of two text tokens using the diffusion denoising loss (2) use this personalized diffusion model to generate the style-aware subject by embedding the style of the target image and conducting adapter style-injection into select upsampling layers of the model during denoising.
+            </p>
+          </div>
+
+          <h3 class="title is-4">Subject Insertion</h3>
+          <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+            <img src="figure/subject_insertion_inference.png" alt="Subject Insertion" width="100%" height="100%">
+          </div>
+          <div class="content has-text-justified">
+            <p>
+              In order to insert the style-aware personalized generation, we (1) copy-paste a segmented version of the subject onto the target image (2) run our subject insertion model on the deshadowed image - this creates context cues and realistically embeds the subject into the image including shadows and reflections.
+            </p>
+          </div>
+
+          <h3 class="title is-4">Bootstrap Domain Adaptation</h3>
+          <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+            <img src="figure/bootstrap_domain_adaptation.png" alt="Bootstrap Domain Adaptation" width="100%" height="100%">
+          </div>
+          <div class="content has-text-justified">
+            <p>
+              Surprisingly, a diffusion model trained for subject insertion/removal on data captured in the real world can generalize to images in the wider stylistic domain in a limited fashion. We introduce <i>bootstrapped domain adaptation</i>, where a model's effective domain can be adapted by using a subset of its own outputs. (left) Specifically, we use a subject removal/insertion model to first remove subjects and shadows from a dataset from our target domain. Then, we filter flawed outputs, and use the filtered set of images to retrain the subject removal/insertion model. (right) We observe that, the initial distribution (blue) changes after training (purple) and initially incorrectly treated images (red samples) are subsequently correctly treated (green). When doing bootstrapped domain adaptation, we train on only the initially correct samples (green).
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Results</h2>
+          <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+            <img src="figure/gallery.png" alt="Results Gallery" width="100%" height="100%">
+          </div>
+          <div class="content has-text-justified">
+            <p>
+              We present a gallery of results to highlight the effectiveness and versatility of our method for style-aware insertion. The examples span a wide range of subjects and target backgrounds with vastly different artistic styles, from photorealistic scenes to cartoons, and paintings.
+            </p>
+          </div>
+
+          <h3 class="title is-4">LLM-Guided Affordances</h3>
+          <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+            <img src="figure/affordances.png" alt="LLM-Guided Affordances" width="100%" height="100%">
+          </div>
+          <div class="content has-text-justified">
+            <p>
+              Examples of an LLM-guided pose modification for Magic Insert, with the LLM suggesting plausible poses and environment interactions for areas of the image and Magic Insert generating and inserting the stylized subject with the corresponding pose into the image.
+            </p>
+          </div>
+
+          <h3 class="title is-4">Bootstrap Domain Adaptation Results</h3>
+          <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+            <img src="figure/bootstrap_results.png" alt="Bootstrap Domain Adaptation Results" width="100%" height="100%">
+          </div>
+          <div class="content has-text-justified">
+            <p>
+              Inserting a subject with the pre-trained subject insertion module without bootstrap domain adaptation generates subpar results, with failure modes such as missing shadows and reflections, or added distortions and artifacts.
+            </p>
+          </div>
+
+          <h3 class="title is-4">Style-Aware Personalization Baseline Comparison</h3>
+          <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+            <img src="figure/comparison_style_personalization.png" alt="Style-Aware Personalization Baseline Comparison" width="100%" height="100%">
+          </div>
+          <div class="content has-text-justified">
+            <p>
+              We show some comparisons of our style-aware personalization method with respect to the top performing baselines StyleAlign + ControlNet and InstantStyle + ControlNet. We can see that the baselines can yield decent outputs, but lag behind our style-aware personalization method in overall quality. In particular InstantStyle + ControlNet outputs often appear slightly blurry and don't capture subject features with good contrast.
+            </p>
+          </div>
+
+          <h3 class="title is-4">Style-Aware Personalization with Attribute Modification</h3>
+          <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+            <img src="figure/attribute_modification.png" alt="Style-Aware Personalization with Attribute Modification" width="100%" height="100%">
+          </div>
+          <div class="content has-text-justified">
+            <p>
+              Our method allows us to modify key attributes for the subject, such as the ones reflected in this figure, while consistently applying our target style over the generations. This allows us to reinvent the character, or add accessories, which gives large flexibility for creative uses. Note that when using ControlNet this capability disappears.
+            </p>
+          </div>
+
+          <h3 class="title is-4">Editability / Fidelity Tradeoff</h3>
+          <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+            <img src="figure/slider_space_marine.png" alt="Editability / Fidelity Tradeoff" width="100%" height="100%">
+          </div>
+          <div class="content has-text-justified">
+            <p>
+              We show the phenomenon of editability / fidelity tradeoff by showing generations for different finetuning iterations of the space marine (shown above the images) with the "green ship" stylization and additional text prompting "sitting down on the floor". When the style-aware personalized model is finetuned for longer on the subject, we get stronger fidelity to the subject but have less flexibility on editing the pose or other semantic properties of the subject. This can also translate to style editability.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre><code>@inproceedings{ruiz2024magicinsert,
+    title={Magic Insert: Style-Aware Drag-and-Drop},
+    author={Ruiz, Nataniel and Li, Yuanzhen and Wadhwa, Neal and Pritch, Yael and Rubinstein, Michael and Jacobs, David E. and Fruchter, Shlomi},
+    booktitle={},
+    year={2024}
+}</code></pre>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="content has-text-centered">
+        <p>
+          We thank Daniel Winter, David Salesin, Yi-Hsuan Tsai, Robin Dua and Jay Yagnik for their invaluable feedback.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

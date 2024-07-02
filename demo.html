@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="Magic Insert: Style-Aware Drag-and-Drop Demo">
+  <meta name="keywords" content="Style-aware drag-and-drop for intuitive image editing">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Magic Insert Interactive Demo</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+    .hero-body {
+      padding-bottom: 1rem;
+    }
+    .section {
+      padding-top: 1rem;
+    }
+    .demo-container {
+      padding-top: 0;
+    }
+    .demo-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      padding: 20px;
+    }
+    .selection-panels {
+      display: flex;
+      gap: 60px;
+      align-items: flex-start;
+    }
+    .selection-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      width: 200px;
+    }
+    .selection-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      justify-items: center;
+    }
+    .character, .background {
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+      border: 3px solid white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .character {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-size: 90% 90%;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-color: white;
+    }
+    .background {
+      width: 80px;
+      height: 80px;
+      background-size: cover;
+      background-position: center;
+    }
+    .character:hover, .background:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .scene-container {
+      display: flex;
+      align-items: center;
+      gap: 50px;
+    }
+    .scene {
+      width: 400px;
+      height: 400px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      border: 2px solid #888;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+      transition: background-image 0.3s ease-in-out;
+    }
+    .dotted-line {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      height: 100%;
+      border-left: 4px dotted #888;
+      z-index: 1;
+      transition: opacity 0.3s ease-in-out;
+    }
+    .draggable-character {
+      width: 185px;
+      height: 185px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      position: absolute;
+      cursor: move;
+      transition: all 0.5s ease-in-out;
+      background-color: transparent;
+    }
+    .instructions {
+      text-align: center;
+      margin-bottom: 20px;
+      font-style: italic;
+      font-size: 18px;
+      color: #333;
+      background-color: #e0e0e0;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    #dragInstructions {
+      display: none;
+      opacity: 0;
+    }
+    #characterStaging {
+      width: 160px;
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.3s ease-in-out;
+    }
+    @keyframes dissolve {
+      0% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+    @keyframes appear {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    #resetButton {
+      padding: 10px 20px;
+      font-size: 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    #resetButton:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+
+<body>
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container">
+        <div class="container has-text-centered">
+          <h1 class="title is-1 publication-title">
+            Magic Insert Interactive Demo
+          </h1>
+          <div class="is-size-5 publication-authors">
+            <a href="index.html" class="button is-normal is-rounded is-dark">
+              <span class="icon">
+                <i class="fas fa-arrow-left"></i>
+              </span>
+              <span>Back to Main Page</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="demo-container">
+        <div class="selection-panels">
+          <div class="selection-panel">
+            <div class="instructions"  style="font-size: 24px;">Subjects</div>
+            <div id="characterSelection" class="selection-grid"></div>
+          </div>
+          <div>
+            <div id="selectInstructions" class="instructions" style="font-size: 24px;"><b>Step 1: Choose a subject and background</b></div>
+            <div id="dragInstructions" class="instructions" style="font-size: 24px;"><b>Step 2: Drag and drop subject on either side</b></div>
+            <div class="scene-container">
+              <div id="characterStaging"></div>
+              <div id="scene" class="scene">
+                <div id="dottedLine" class="dotted-line"></div>
+              </div>
+            </div>
+          </div>
+          <div class="selection-panel">
+            <div class="instructions" style="font-size: 24px;">Backgrounds</div>
+            <div id="backgroundSelection" class="selection-grid"></div>
+          </div>
+        </div>
+        <button id="resetButton">Reset Demo</button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const characters = ['alien', 'chest', 'clown', 'dog', 'gnome', 'goblin', 'griffon', 'unicorn'];
+    const backgrounds = ['cartoon', 'neon', 'cave', 'red', 'desert_oil', 'temple', 'esplanade', 'winter', 'forest', 'zen'];
+
+    let selectedCharacter = null;
+    let selectedBackground = null;
+    let characterMerged = false;
+
+    function createSelectionPanel(items, panelId, itemClass, isCharacter) {
+      const panel = document.getElementById(panelId);
+      items.forEach((item) => {
+        const div = document.createElement('div');
+        div.className = itemClass;
+        if (isCharacter) {
+          div.style.backgroundImage = `url('assets/characters/${item}.png')`;
+        } else {
+          div.style.backgroundImage = `url('assets/backgrounds/${item}.png')`;
+        }
+        div.onclick = () => selectItem(div, itemClass, item);
+        panel.appendChild(div);
+      });
+    }
+
+    function selectItem(item, itemClass, name) {
+      document.querySelectorAll(`.${itemClass}`).forEach(el => el.style.borderColor = 'white');
+      item.style.borderColor = 'black';
+      
+      if (itemClass === 'character') {
+        selectedCharacter = name;
+        createDraggableCharacter();
+      } else {
+        selectedBackground = name;
+        resetSceneWithNewBackground(name);
+      }
+      
+      checkSelectionComplete();
+    }
+
+    function resetSceneWithNewBackground(backgroundName) {
+      const scene = document.getElementById('scene');
+      scene.innerHTML = '<div id="dottedLine" class="dotted-line"></div>';
+      scene.style.backgroundImage = `url('assets/backgrounds/${backgroundName}.png')`;
+      characterMerged = false;
+      
+      if (selectedCharacter) {
+        createDraggableCharacter();
+      }
+    }
+
+    function createDraggableCharacter() {
+      const staging = document.getElementById('characterStaging');
+      staging.innerHTML = '';
+      const char = document.createElement('div');
+      char.className = 'draggable-character';
+      char.style.backgroundImage = `url('assets/characters/${selectedCharacter}.png')`;
+      char.draggable = true;
+      char.ondragstart = drag;
+      staging.appendChild(char);
+    }
+
+    function checkSelectionComplete() {
+      if (selectedCharacter && selectedBackground) {
+        fadeOut(document.getElementById('selectInstructions'), () => {
+          fadeIn(document.getElementById('dragInstructions'));
+        });
+      }
+    }
+
+    function fadeOut(element, callback) {
+      element.style.opacity = '0';
+      element.style.transform = 'translateY(-10px)';
+      setTimeout(() => {
+        element.style.display = 'none';
+        if (callback) callback();
+      }, 300);
+    }
+
+    function fadeIn(element) {
+      element.style.display = 'block';
+      setTimeout(() => {
+        element.style.opacity = '1';
+        element.style.transform = 'translateY(0)';
+      }, 50);
+    }
+
+    function resetDemo() {
+      const scene = document.getElementById('scene');
+      const characterStaging = document.getElementById('characterStaging');
+      const selectInstructions = document.getElementById('selectInstructions');
+      const dragInstructions = document.getElementById('dragInstructions');
+
+      // Fade out the scene and character staging
+      scene.style.opacity = '0';
+      characterStaging.style.opacity = '0';
+
+      setTimeout(() => {
+        // Reset the scene
+        scene.style.backgroundImage = '';
+        scene.innerHTML = '<div id="dottedLine" class="dotted-line"></div>';
+        
+        // Reset the character staging
+        characterStaging.innerHTML = '';
+
+        // Reset instructions
+        selectInstructions.style.display = 'block';
+        selectInstructions.style.opacity = '1';
+        selectInstructions.style.transform = 'translateY(0)';
+
+        dragInstructions.style.display = 'none';
+        dragInstructions.style.opacity = '0';
+        dragInstructions.style.transform = 'translateY(-10px)';
+
+        // Reset selections
+        document.querySelectorAll('.character, .background').forEach(el => el.style.borderColor = 'white');
+        selectedCharacter = null;
+        selectedBackground = null;
+        characterMerged = false;
+
+        // Fade in the reset elements
+        scene.style.opacity = '1';
+        characterStaging.style.opacity = '1';
+      }, 300);
+    }
+
+    function drag(ev) {
+      ev.dataTransfer.setData("text", ev.target.id);
+      const dottedLine = document.getElementById('dottedLine');
+      if (dottedLine) dottedLine.style.opacity = '0';
+    }
+
+    function allowDrop(ev) {
+      ev.preventDefault();
+    }
+
+    function drop(ev) {
+      ev.preventDefault();
+      const char = document.querySelector('.draggable-character');
+      const scene = document.getElementById('scene');
+      const rect = scene.getBoundingClientRect();
+      const x = ev.clientX - rect.left;
+      
+      const side = x <= 200 ? 'l' : 'r';
+      
+      char.style.animation = 'dissolve 0.5s forwards';
+      
+      setTimeout(() => {
+        char.remove();
+        
+        const mergedImage = document.createElement('div');
+        mergedImage.style.position = 'absolute';
+        mergedImage.style.top = '0';
+        mergedImage.style.left = '0';
+        mergedImage.style.width = '100%';
+        mergedImage.style.height = '100%';
+        mergedImage.style.backgroundImage = `url('assets/${selectedCharacter}/res_${selectedCharacter}_${selectedBackground}_${side}.jpg')`;
+        mergedImage.style.backgroundSize = 'cover';
+        mergedImage.style.backgroundPosition = 'center';
+        mergedImage.style.animation = 'appear 0.5s forwards';
+        
+        scene.appendChild(mergedImage);
+        
+        characterMerged = true;
+      }, 500);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      createSelectionPanel(characters, 'characterSelection', 'character', true);
+      createSelectionPanel(backgrounds, 'backgroundSelection', 'background', false);
+
+      const sceneElement = document.getElementById('scene');
+      sceneElement.ondragover = allowDrop;
+      sceneElement.ondrop = drop;
+
+      document.getElementById('resetButton').addEventListener('click', resetDemo);
+    });
+  </script>
+</body>
+</html>
