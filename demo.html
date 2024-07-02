@@ -123,6 +123,7 @@
       transition: all 0.5s ease-in-out;
       background-color: transparent;
       touch-action: none;
+      z-index: 10;
     }
     .instructions {
       text-align: center;
@@ -408,10 +409,25 @@
     function touchMove(ev) {
       ev.preventDefault();
       const touch = ev.touches[0];
+      const char = ev.target;
+      const scene = document.getElementById('scene');
+      const sceneRect = scene.getBoundingClientRect();
       const newX = touch.clientX - touchStartX;
       const newY = touch.clientY - touchStartY;
-      ev.target.style.left = `${newX}px`;
-      ev.target.style.top = `${newY}px`;
+      
+      // Ensure the character stays within the scene boundaries
+      const charRect = char.getBoundingClientRect();
+      const maxX = sceneRect.width - charRect.width;
+      const maxY = sceneRect.height - charRect.height;
+      
+      const clampedX = Math.max(0, Math.min(newX, maxX));
+      const clampedY = Math.max(0, Math.min(newY, maxY));
+      
+      char.style.left = `${clampedX}px`;
+      char.style.top = `${clampedY}px`;
+      
+      // Use transform for smoother movement
+      char.style.transform = `translate3d(${clampedX}px, ${clampedY}px, 0)`;
     }
 
     function touchEnd(ev) {
@@ -431,6 +447,7 @@
         // If not dropped in the scene, return to original position
         char.style.left = '';
         char.style.top = '';
+        char.style.transform = '';
       }
     }
 
